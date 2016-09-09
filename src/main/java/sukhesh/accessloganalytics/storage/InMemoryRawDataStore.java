@@ -1,5 +1,6 @@
 package sukhesh.accessloganalytics.storage;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sukhesh.accessloganalytics.config.GlobalConfig;
 import sukhesh.accessloganalytics.model.LogEntry;
@@ -12,13 +13,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
+import sukhesh.accessloganalytics.util.BeanLookupHelper;
 
 /**
  * Created by sukhesh on 08/09/16.
  */
 @Component
-public enum InMemoryRawDataStore implements RawDataStore {
-    INSTANCE;
+public class InMemoryRawDataStore implements RawDataStore {
 
     Queue<LogEntry> entries = new ConcurrentLinkedQueue<>();
     AtomicInteger counter = new AtomicInteger();
@@ -40,6 +41,11 @@ public enum InMemoryRawDataStore implements RawDataStore {
         for(AggregatedDataStore store:aggregatedDataStores) {
             store.write(entry);
         }
+    }
+
+    @Override
+    public int currentSize() {
+        return entries.size();
     }
 
     @Override

@@ -7,6 +7,7 @@ import sukhesh.accessloganalytics.model.LogEntry;
  */
 public interface RawDataStore extends DataStore{
     public void write(LogEntry entry);
+    public int currentSize();
 
     public void addAggregatedDataStore(AggregatedDataStore store);
 }

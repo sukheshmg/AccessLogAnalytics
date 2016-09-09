@@ -8,4 +8,5 @@ import sukhesh.accessloganalytics.model.LogEntry;
 public interface AggregatedDataStore {
     void write(LogEntry entry);
     void remove(LogEntry entry);
+    public int currentSize();
 }

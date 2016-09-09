@@ -1,6 +1,10 @@
 package sukhesh.accessloganalytics.storage;
 
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import sukhesh.accessloganalytics.model.LogEntry;
+import sukhesh.accessloganalytics.util.BeanLookupHelper;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -10,10 +14,10 @@ import java.util.TreeMap;
 /**
  * Created by sukhesh on 08/09/16.
  */
-public enum  TimeBasedAggregatedDataStore implements AggregatedDataStore {
-    INSTANCE;
+@Component
+public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
 
-    TreeMap<Date, List<LogEntry>> entries = new TreeMap<>();
+    TreeMap<DateTime, List<LogEntry>> entries = new TreeMap<>();
 
     @Override
     public void write(LogEntry entry) {
@@ -32,5 +36,10 @@ public enum  TimeBasedAggregatedDataStore implements AggregatedDataStore {
         if(lst != null) {
             lst.remove(entry);
         }
+    }
+
+    @Override
+    public int currentSize() {
+        return entries.size();
     }
 }
