@@ -8,7 +8,7 @@ public enum GlobalConfig {
 
     private int servicePort = 9080;
     private String logUri = "http://www.almhuette-raith.at/apache-log/access.log";
-    private int maxRecordsInMemory = 100000;
+    private int maxRecordsInMemory = 10000000;
 
 
     public int getServicePort() {

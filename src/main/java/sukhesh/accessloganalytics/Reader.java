@@ -1,4 +1,4 @@
-package sukhesh.accessloganalytics.reader;
+package sukhesh.accessloganalytics;
 
 import sukhesh.accessloganalytics.model.LogEntry;
 

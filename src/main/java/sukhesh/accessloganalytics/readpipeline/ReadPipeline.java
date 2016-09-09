@@ -6,12 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import sukhesh.accessloganalytics.config.GlobalConfig;
 import sukhesh.accessloganalytics.model.LogEntry;
-import sukhesh.accessloganalytics.reader.RemoteFileReader;
+import sukhesh.accessloganalytics.RemoteFileReader;
 import sukhesh.accessloganalytics.util.BeanLookupHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
