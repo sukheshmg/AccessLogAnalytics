@@ -6,6 +6,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang3.StringUtils;
 import sukhesh.accessloganalytics.api.AccessApis;
+import sukhesh.accessloganalytics.config.GlobalConfig;
 
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
@@ -32,10 +33,10 @@ public class AccessLogAnalysis {
         }
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("\n\nEnter the metrics to capture in the form of comma separated list of operation:metric (sum:Size,count,avg:ResponseCode)");
+        System.out.println("\n\nEnter the metrics to capture in the form of comma separated list of operation:metric (Example: sum:Size,count,avg:ResponseCode)");
         String metrics = scanner.nextLine();
 
-        System.out.println("\nEnter the list of comma separated dimensions (Resource,Verb,UserAgent,Host)");
+        System.out.println("\nEnter the list of comma separated dimensions (Example: Resource,Verb,UserAgent,Host)");
         String dimensions = scanner.nextLine();
 
         System.out.println("\nEnter a start date (optional) (yyyy/MM/DD/HH/MM/ss)");
@@ -51,22 +52,25 @@ public class AccessLogAnalysis {
             sortAscending = true;
         }
 
-        System.out.println("\nEnter the metric to be used for sorting (optional) (sum:Size)");
+        System.out.println("\nEnter the metric to be used for sorting (optional) (Example: sum:Size)");
         String sortBy = scanner.nextLine();
 
-        System.out.println("\nEnter a limit on number of records (optional)");
-        String _limit = scanner.nextLine();
         int limit = -1;
-        if(StringUtils.isNotEmpty(_limit)) {
-            try {
-                limit = Integer.parseInt(_limit);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid number. Ignoring");
+        String _limit = null;
+        if(StringUtils.isNotEmpty(sortBy)) {
+            System.out.println("\nEnter a limit on number of records (optional)");
+            _limit = scanner.nextLine();
+            if (StringUtils.isNotEmpty(_limit)) {
+                try {
+                    limit = Integer.parseInt(_limit);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number. Ignoring");
+                }
             }
         }
 
 
-        String url = "http://localhost:8080/v1/accessloganalytics/query?";
+        String url = "http://localhost:" + GlobalConfig.INSTANCE.getServicePort() + "/v1/accessloganalytics/query?";
         if(StringUtils.isNotEmpty(start)) {
             url += "startTime=" + start + "&";
             if(StringUtils.isNotEmpty(end)) {

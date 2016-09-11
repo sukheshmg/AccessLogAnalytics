@@ -21,7 +21,6 @@ public class LogEntryParser {
     private String pattern = "(.*)\\s(.*)\\s(.*)\\s(\\[.*\\s.*\\])\\s(\".*\\s.*\\s.*\")\\s(.*)\\s(.*)\\s(.*)\\s(\".*\")\\s(.*)";
 
     public LogEntry parse(String entry) {
-        logger.info(entry);
         Pattern r = Pattern.compile(pattern);
         Matcher matcher = r.matcher(entry);
 

@@ -2,16 +2,17 @@ package sukhesh.accessloganalytics.boot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import sukhesh.accessloganalytics.commandlinetool.AccessLogAnalysis;
 import sukhesh.accessloganalytics.config.ConfigLoader;
-import sukhesh.accessloganalytics.storage.InMemoryRawDataStore;
-import sukhesh.accessloganalytics.storage.TimeBasedAggregatedDataStore;
+import sukhesh.accessloganalytics.config.GlobalConfig;
 import sukhesh.accessloganalytics.taskmanager.TaskManager;
 import sukhesh.accessloganalytics.util.BeanLookupHelper;
 
@@ -27,6 +28,12 @@ public class AccessLogAnalyticsBoot {
 
 
     private static final Logger logger = LoggerFactory.getLogger(AccessLogAnalyticsBoot.class);
+
+    @Bean
+    public EmbeddedServletContainerFactory servletContainer() {
+        TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory(GlobalConfig.INSTANCE.getServicePort());
+        return factory;
+    }
 
     public static void main(String[] args) {
 

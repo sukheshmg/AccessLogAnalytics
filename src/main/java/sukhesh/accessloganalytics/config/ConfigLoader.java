@@ -37,6 +37,7 @@ public enum ConfigLoader {
 
         String maxRecordsInMemory = System.getProperty("max.records.inmemory");
         if(StringUtils.isNotEmpty(maxRecordsInMemory)) {
+            logger.info("Setting max.records.inmemory to " + maxRecordsInMemory);
             try {
                 GlobalConfig.INSTANCE.setMaxRecordsInMemory(Integer.parseInt(maxRecordsInMemory));
             } catch (NumberFormatException e) {
@@ -48,6 +49,7 @@ public enum ConfigLoader {
 
         String _sleeptime = System.getProperty("read.sleep.time");
         if(StringUtils.isNotEmpty(_sleeptime)) {
+            logger.info("Setting read.sleep.time to " + _sleeptime);
             try {
                 GlobalConfig.INSTANCE.setSleepBetweenReads(Integer.parseInt(_sleeptime));
             } catch (NumberFormatException e) {
