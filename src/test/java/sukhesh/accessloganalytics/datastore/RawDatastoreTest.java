@@ -1,11 +1,15 @@
 package sukhesh.accessloganalytics.datastore;
 
+import org.joda.time.DateTime;
+import org.joda.time.chrono.ISOChronology;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sukhesh.accessloganalytics.LogEntryParser;
 import sukhesh.accessloganalytics.model.LogEntry;
+import sukhesh.accessloganalytics.queryengine.QueryEngine;
+import sukhesh.accessloganalytics.queryengine.QueryEngineImpl;
 import sukhesh.accessloganalytics.querymodel.Function;
 import sukhesh.accessloganalytics.storage.AggregatedDataStore;
 import sukhesh.accessloganalytics.storage.InMemoryRawDataStore;
@@ -55,7 +59,7 @@ public class RawDatastoreTest {
 
     @Test
     public void testEntriesTimeBased() {
-        Collection<List<LogEntry>> groupedEntries = timeBased.getGroupedEntries(new String[]{"time"});
+        Collection<List<LogEntry>> groupedEntries = timeBased.getGroupedEntries(new String[]{"Date"});
         Assert.assertEquals(3, groupedEntries.size());
         List<LogEntry>[] ar = groupedEntries.toArray(new List[3]);
         Assert.assertEquals(3, ar.length);
@@ -82,7 +86,7 @@ public class RawDatastoreTest {
         Function sum = new Function("sum", "Size");
         Function avg = new Function("avg", "Size");
 
-        String[] dimensions = {"time"};
+        String[] dimensions = {"Date"};
         Function[] functions = {sum, avg};
 
         Map<Object, List<Double>> res = timeBased.getGroupedAggregatedEntries(dimensions, functions);
@@ -103,5 +107,34 @@ public class RawDatastoreTest {
         Assert.assertEquals(4263.0, (double)l1.get(1), 0);
 
         System.out.println();
+    }
+
+    @Test
+    public void testQueryEngineDateGrouping() {
+        String[] dimensions = {"Date", "Resource", "Verb"};
+        Function f1 = new Function("sum", "Size");
+        Function f2 = new Function("avg", "Size");
+        Function f3 = new Function("sum", "ResponseCode");
+        Function f4 = new Function("avg", "ResponseCode");
+        Function[] metrics = {f1,f2,f3,f4};
+        Collection<List<LogEntry>> collection = timeBased.getGroupedEntries(dimensions);
+
+        Map<List<Object>, List<Double>> res = new QueryEngineImpl().getAggregatedData(dimensions, metrics, timeBased);
+        System.out.print("");
+    }
+
+    @Test
+    public void testStartTimeQuery() {
+        DateTime start = new DateTime(2015,12,12,18,31,26, ISOChronology.getInstanceUTC());
+        Collection<List<LogEntry>> entries = ((TimeBasedAggregatedDataStore)timeBased).getEntriesAfterTime(start);
+        Assert.assertEquals(2, entries.size());
+    }
+
+    @Test
+    public void testStartAndEndTimeQuery() {
+        DateTime start = new DateTime(2015,12,12,18,31,25, ISOChronology.getInstanceUTC());
+        DateTime end = new DateTime(2015,12,12,18,31,26, ISOChronology.getInstanceUTC());
+        Collection<List<LogEntry>> entries = ((TimeBasedAggregatedDataStore)timeBased).getEntriesBetweenTime(start, end);
+        Assert.assertEquals(2, entries.size());
     }
 }

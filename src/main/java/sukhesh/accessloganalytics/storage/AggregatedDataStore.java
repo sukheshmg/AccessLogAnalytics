@@ -15,5 +15,7 @@ public interface AggregatedDataStore {
     void remove(LogEntry entry);
     Collection<List<LogEntry>> getGroupedEntries(String[] dimensions);
     Map<Object, List<Double>> getGroupedAggregatedEntries(String[] dimensions, Function[] metrics);
+    List<String> getDimensions();
+
     public int currentSize();
 }

@@ -6,6 +6,9 @@ import sukhesh.accessloganalytics.storage.AggregatedDataStore;
 import sukhesh.accessloganalytics.storage.RawDataStore;
 import sukhesh.accessloganalytics.storage.TimeBasedAggregatedDataStore;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by sukhesh on 08/09/16.
  */
@@ -28,5 +31,11 @@ public enum BeanLookupHelper {
 
     public ReadPipeline getReadPipeline() {
         return (ReadPipeline) context.getBean("readPipeline");
+    }
+
+    public List<AggregatedDataStore> getAllAggregatedDataStores() {
+        List<AggregatedDataStore> dataStores = new LinkedList<>();
+        dataStores.add(getTimeBasedAggregatedDataStore());
+        return dataStores;
     }
 }

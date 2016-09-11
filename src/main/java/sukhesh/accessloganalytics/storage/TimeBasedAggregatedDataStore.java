@@ -43,7 +43,7 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
 
     @Override
     public Collection<List<LogEntry>> getGroupedEntries(String[] dimensions) {
-        if(dimensions == null || dimensions.length != 1 || !dimensions[0].equals("time")) {
+        if(dimensions == null || dimensions.length == 0 || !dimensions[0].equals("Date")) {
             logger.error("Time based aggregation accepts only time as dimension");
             return null;
         }
@@ -74,7 +74,35 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
     }
 
     @Override
+    public List<String> getDimensions() {
+        List<String> res = new LinkedList<>();
+        res.add("Date");
+        return res;
+    }
+
+    @Override
     public int currentSize() {
         return entries.size();
+    }
+
+    public Collection<List<LogEntry>> getEntriesAfterTime(DateTime start) {
+        DateTime leastKey = entries.ceilingKey(start);
+        Map<DateTime, List<LogEntry>> tailMap = entries.tailMap(leastKey);
+        Collection<List<LogEntry>> ret = new LinkedList<>();
+        for(List<LogEntry> l : tailMap.values()) {
+            ret.add(l);
+        }
+        return ret;
+    }
+
+    public Collection<List<LogEntry>> getEntriesBetweenTime(DateTime start, DateTime end) {
+        DateTime leastKey = entries.ceilingKey(start);
+        DateTime highestKey = entries.floorKey(end.plusSeconds(1));
+        Map<DateTime, List<LogEntry>> subMap = entries.subMap(leastKey, true, highestKey, true);
+        Collection<List<LogEntry>> ret = new LinkedList<>();
+        for(List<LogEntry> l:subMap.values()) {
+            ret.add(l);
+        }
+        return ret;
     }
 }
