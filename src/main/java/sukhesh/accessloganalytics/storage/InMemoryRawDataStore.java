@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import sukhesh.accessloganalytics.config.GlobalConfig;
 import sukhesh.accessloganalytics.model.LogEntry;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -14,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import sukhesh.accessloganalytics.util.BeanLookupHelper;
+import sukhesh.accessloganalytics.util.Util;
 
 /**
  * Created by sukhesh on 08/09/16.
@@ -51,6 +53,15 @@ public class InMemoryRawDataStore implements RawDataStore {
     @Override
     public void addAggregatedDataStore(AggregatedDataStore store) {
         aggregatedDataStores.add(store);
+    }
+
+    @Override
+    public Collection<List<LogEntry>> getAllEntries() {
+        Collection<List<LogEntry>> ret = new LinkedList<>();
+        List<LogEntry> lst = new LinkedList<>();
+        lst.addAll(entries);
+        ret.add(lst);
+        return Util.deepCopy(ret);
     }
 
 }

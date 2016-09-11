@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Created by sukhesh on 09/09/16.
  */
-public class RawDatastoreTest {
+public class DataStoreTest {
     static LogEntry e1;
     static LogEntry e2;
     static LogEntry e3;
@@ -110,24 +110,12 @@ public class RawDatastoreTest {
     }
 
     @Test
-    public void testQueryEngineDateGrouping() {
-        String[] dimensions = {"Date", "Resource", "Verb"};
-        Function f1 = new Function("sum", "Size");
-        Function f2 = new Function("avg", "Size");
-        Function f3 = new Function("sum", "ResponseCode");
-        Function f4 = new Function("avg", "ResponseCode");
-        Function[] metrics = {f1,f2,f3,f4};
-        Collection<List<LogEntry>> collection = timeBased.getGroupedEntries(dimensions);
-
-        Map<List<Object>, List<Double>> res = new QueryEngineImpl().getAggregatedData(dimensions, metrics, timeBased);
-        System.out.print("");
-    }
-
-    @Test
     public void testStartTimeQuery() {
         DateTime start = new DateTime(2015,12,12,18,31,26, ISOChronology.getInstanceUTC());
         Collection<List<LogEntry>> entries = ((TimeBasedAggregatedDataStore)timeBased).getEntriesAfterTime(start);
-        Assert.assertEquals(2, entries.size());
+        Assert.assertEquals(1, entries.size());
+        List<LogEntry> theOnlyList = ((LinkedList<List<LogEntry>>)entries).get(0);
+        Assert.assertEquals(2, theOnlyList.size());
     }
 
     @Test
@@ -135,6 +123,14 @@ public class RawDatastoreTest {
         DateTime start = new DateTime(2015,12,12,18,31,25, ISOChronology.getInstanceUTC());
         DateTime end = new DateTime(2015,12,12,18,31,26, ISOChronology.getInstanceUTC());
         Collection<List<LogEntry>> entries = ((TimeBasedAggregatedDataStore)timeBased).getEntriesBetweenTime(start, end);
-        Assert.assertEquals(2, entries.size());
+        Assert.assertEquals(1, entries.size());
+        List<LogEntry> theOnlyList = ((LinkedList<List<LogEntry>>)entries).get(0);
+        Assert.assertEquals(3, theOnlyList.size());
+    }
+
+    @Test
+    public void testInMemoryDSGetAllEntries() {
+        Collection<List<LogEntry>> entries = rawDataStore.getAllEntries();
+        Assert.assertEquals(1, entries.size());
     }
 }

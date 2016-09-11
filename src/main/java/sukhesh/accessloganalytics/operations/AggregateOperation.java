@@ -24,6 +24,8 @@ public class AggregateOperation {
                 res += getValueFromEntry(entry, metric);
             } else if(operation.equals("avg")) {
                 res += getValueFromEntry(entry, metric);
+            } else if(operation.equals("count")) {
+                res += 1;
             }
         }
         if(operation.equals("avg")) {

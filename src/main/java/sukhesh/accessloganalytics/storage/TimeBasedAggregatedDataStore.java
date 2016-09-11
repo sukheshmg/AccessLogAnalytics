@@ -9,6 +9,7 @@ import sukhesh.accessloganalytics.model.LogEntry;
 import sukhesh.accessloganalytics.operations.AggregateOperation;
 import sukhesh.accessloganalytics.querymodel.Function;
 import sukhesh.accessloganalytics.util.BeanLookupHelper;
+import sukhesh.accessloganalytics.util.Util;
 
 import java.util.*;
 
@@ -23,7 +24,7 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
     TreeMap < DateTime, List < LogEntry >> entries = new TreeMap<>();
 
     @Override
-    public void write(LogEntry entry) {
+    public synchronized void write(LogEntry entry) {
         if(entries.containsKey(entry.getDate())) {
             entries.get(entry.getDate()).add(entry);
         } else {
@@ -34,7 +35,7 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
     }
 
     @Override
-    public void remove(LogEntry entry) {
+    public synchronized void remove(LogEntry entry) {
         List<LogEntry> lst = entries.get(entry.getDate());
         if(lst != null) {
             lst.remove(entry);
@@ -42,17 +43,20 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
     }
 
     @Override
-    public Collection<List<LogEntry>> getGroupedEntries(String[] dimensions) {
+    public synchronized Collection<List<LogEntry>> getGroupedEntries(String[] dimensions) {
         if(dimensions == null || dimensions.length == 0 || !dimensions[0].equals("Date")) {
             logger.error("Time based aggregation accepts only time as dimension");
             return null;
         }
 
-        return entries.values();
+        return Util.deepCopy(entries.values());
+
     }
 
+
+
     @Override
-    public Map<Object, List<Double>> getGroupedAggregatedEntries(String[] dimensions, Function[] metrics) {
+    public synchronized Map<Object, List<Double>> getGroupedAggregatedEntries(String[] dimensions, Function[] metrics) {
         Collection<List<LogEntry>> groupedEntries = getGroupedEntries(dimensions);
         if(dimensions == null) {
             logger.error("Could not get grouped entries");
@@ -81,28 +85,42 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
     }
 
     @Override
-    public int currentSize() {
+    public synchronized int currentSize() {
         return entries.size();
     }
 
-    public Collection<List<LogEntry>> getEntriesAfterTime(DateTime start) {
+    /**
+     * entries after a time
+     * returns a collection which contains a single list
+     * @param start
+     * @return
+     */
+    public synchronized Collection<List<LogEntry>> getEntriesAfterTime(DateTime start) {
         DateTime leastKey = entries.ceilingKey(start);
         Map<DateTime, List<LogEntry>> tailMap = entries.tailMap(leastKey);
         Collection<List<LogEntry>> ret = new LinkedList<>();
+        List<LogEntry> theOnlyList = new LinkedList<>();
         for(List<LogEntry> l : tailMap.values()) {
-            ret.add(l);
+            for(LogEntry logEntry:l) {
+                theOnlyList.add(logEntry);
+            }
         }
-        return ret;
+        ret.add(theOnlyList);
+        return Util.deepCopy(ret);
     }
 
-    public Collection<List<LogEntry>> getEntriesBetweenTime(DateTime start, DateTime end) {
+    public synchronized Collection<List<LogEntry>> getEntriesBetweenTime(DateTime start, DateTime end) {
         DateTime leastKey = entries.ceilingKey(start);
         DateTime highestKey = entries.floorKey(end.plusSeconds(1));
         Map<DateTime, List<LogEntry>> subMap = entries.subMap(leastKey, true, highestKey, true);
         Collection<List<LogEntry>> ret = new LinkedList<>();
+        List<LogEntry> theOnlyList = new LinkedList<>();
         for(List<LogEntry> l:subMap.values()) {
-            ret.add(l);
+            for(LogEntry logEntry:l) {
+                theOnlyList.add(logEntry);
+            }
         }
-        return ret;
+        ret.add(theOnlyList);
+        return Util.deepCopy(ret);
     }
 }

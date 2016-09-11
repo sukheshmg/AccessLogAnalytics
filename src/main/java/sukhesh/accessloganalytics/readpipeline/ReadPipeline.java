@@ -45,6 +45,11 @@ public class ReadPipeline implements Runnable{
             for(LogEntry entry : entries) {
                 BeanLookupHelper.INSTANCE.getRawDataStore().write(entry);
             }
+            try {
+                Thread.currentThread().sleep(10000);
+            } catch (InterruptedException e) {
+                logger.error("Interrupted", e);
+            }
         }
     }
 }
