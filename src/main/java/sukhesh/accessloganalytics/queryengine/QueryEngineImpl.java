@@ -62,12 +62,16 @@ public class QueryEngineImpl implements QueryEngine {
 
     @Override
     public Map<List<Object>, List<Double>> getAggregatedData(String[] dimensions, Function[] metrics, DateTime start, boolean sortAscending, int metricIndexToSort) {
-        return null;
+
+        Map<List<Object>, List<Double>> map = getAggregatedData(dimensions, metrics, start);
+
+        return doSort(map, metricIndexToSort, sortAscending);
     }
 
     @Override
     public Map<List<Object>, List<Double>> getAggregatedData(String[] dimensions, Function[] metrics, DateTime start, boolean sortAscending, int metricIndexToSort, int limit) {
-        return null;
+        Map<List<Object>, List<Double>> map = getAggregatedData(dimensions, metrics, start, sortAscending, metricIndexToSort);
+        return doLimitToCount(map, limit);
     }
 
     @Override
@@ -91,12 +95,15 @@ public class QueryEngineImpl implements QueryEngine {
 
     @Override
     public Map<List<Object>, List<Double>> getAggregatedData(String[] dimensions, Function[] metrics, DateTime start, DateTime end, boolean sortAscending, int metricIndexToStart) {
-        return null;
+        Map<List<Object>, List<Double>> map = getAggregatedData(dimensions, metrics, start, end);
+
+        return doSort(map, metricIndexToStart, sortAscending);
     }
 
     @Override
     public Map<List<Object>, List<Double>> getAggregatedData(String[] dimensions, Function[] metrics, DateTime start, DateTime end, boolean sortAscending, int metricIndexToStart, int limit) {
-        return null;
+        Map<List<Object>, List<Double>> map = getAggregatedData(dimensions, metrics, start, end, sortAscending, metricIndexToStart);
+        return doLimitToCount(map, limit);
     }
 
     @Override

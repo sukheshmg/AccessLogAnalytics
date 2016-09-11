@@ -112,6 +112,9 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
     public synchronized Collection<List<LogEntry>> getEntriesBetweenTime(DateTime start, DateTime end) {
         DateTime leastKey = entries.ceilingKey(start);
         DateTime highestKey = entries.floorKey(end.plusSeconds(1));
+        if(leastKey == null || highestKey == null) {
+            return new LinkedList<>();
+        }
         Map<DateTime, List<LogEntry>> subMap = entries.subMap(leastKey, true, highestKey, true);
         Collection<List<LogEntry>> ret = new LinkedList<>();
         List<LogEntry> theOnlyList = new LinkedList<>();
