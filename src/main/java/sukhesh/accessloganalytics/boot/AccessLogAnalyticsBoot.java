@@ -8,11 +8,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import sukhesh.accessloganalytics.commandlinetool.AccessLogAnalysis;
 import sukhesh.accessloganalytics.config.ConfigLoader;
 import sukhesh.accessloganalytics.storage.InMemoryRawDataStore;
 import sukhesh.accessloganalytics.storage.TimeBasedAggregatedDataStore;
 import sukhesh.accessloganalytics.taskmanager.TaskManager;
 import sukhesh.accessloganalytics.util.BeanLookupHelper;
+
+import javax.xml.bind.ValidationException;
 
 /**
  * Created by sukhesh on 08/09/16.
@@ -35,5 +38,15 @@ public class AccessLogAnalyticsBoot {
         BeanLookupHelper.INSTANCE.init(applicationContext);
 
         TaskManager.INSTANCE.startReading();
+
+        while (true) {
+            try {
+                AccessLogAnalysis.run();
+            } catch (ValidationException e) {
+                System.out.println("Validation exception. " + e.getMessage());
+            } catch (Throwable t) {
+                System.out.println("Exception while processing request. " + t.getMessage());
+            }
+        }
     }
 }

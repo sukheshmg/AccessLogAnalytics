@@ -46,7 +46,7 @@ public class ReadPipeline implements Runnable{
                 BeanLookupHelper.INSTANCE.getRawDataStore().write(entry);
             }
             try {
-                Thread.currentThread().sleep(100);
+                Thread.currentThread().sleep(GlobalConfig.INSTANCE.getSleepBetweenReads());
             } catch (InterruptedException e) {
                 logger.error("Interrupted", e);
             }

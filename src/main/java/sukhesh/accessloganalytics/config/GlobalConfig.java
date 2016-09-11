@@ -8,7 +8,8 @@ public enum GlobalConfig {
 
     private int servicePort = 9080;
     private String logUri = "http://www.almhuette-raith.at/apache-log/access.log";
-    private int maxRecordsInMemory = 1000000;
+    private int maxRecordsInMemory = 100000;
+    private int sleepBetweenReads = 300;
 
 
     public int getServicePort() {
@@ -33,5 +34,13 @@ public enum GlobalConfig {
 
     public void setMaxRecordsInMemory(int maxRecordsInMemory) {
         this.maxRecordsInMemory = maxRecordsInMemory;
+    }
+
+    public int getSleepBetweenReads() {
+        return sleepBetweenReads;
+    }
+
+    public void setSleepBetweenReads(int sleepBetweenReads) {
+        this.sleepBetweenReads = sleepBetweenReads;
     }
 }

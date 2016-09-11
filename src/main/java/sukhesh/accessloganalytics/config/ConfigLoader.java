@@ -45,5 +45,14 @@ public enum ConfigLoader {
         } else {
             logger.info("Using default max.records.inmemory " + GlobalConfig.INSTANCE.getMaxRecordsInMemory());
         }
+
+        String _sleeptime = System.getProperty("read.sleep.time");
+        if(StringUtils.isNotEmpty(_sleeptime)) {
+            try {
+                GlobalConfig.INSTANCE.setSleepBetweenReads(Integer.parseInt(_sleeptime));
+            } catch (NumberFormatException e) {
+                logger.error("Invalid configuration read.sleep.time");
+            }
+        }
     }
 }
