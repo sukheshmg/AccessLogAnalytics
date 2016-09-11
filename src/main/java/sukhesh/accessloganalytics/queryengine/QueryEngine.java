@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * the query engine
+ * does the ,ajor work of grouping by dimensions and aggregating over them
  * Created by sukhesh on 09/09/16.
  */
 public interface QueryEngine {

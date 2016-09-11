@@ -9,6 +9,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
+ * utility to calculate the given metric over a list of log entries
+ * uses reflection to get the values. so, the individual metric fields need to be verified to be valid beforehand
  * Created by sukhesh on 09/09/16.
  */
 public class AggregateOperation {

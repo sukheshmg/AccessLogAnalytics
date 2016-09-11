@@ -1,6 +1,8 @@
 package sukhesh.accessloganalytics.config;
 
 /**
+ * the configuration store
+ *
  * Created by sukhesh on 08/09/16.
  */
 public enum GlobalConfig {
@@ -8,7 +10,7 @@ public enum GlobalConfig {
 
     private int servicePort = 9080;
     private String logUri = "http://www.almhuette-raith.at/apache-log/access.log";
-    private int maxRecordsInMemory = 100000;
+    private int maxRecordsInMemory = 50000;
     private int sleepBetweenReads = 300;
 
 

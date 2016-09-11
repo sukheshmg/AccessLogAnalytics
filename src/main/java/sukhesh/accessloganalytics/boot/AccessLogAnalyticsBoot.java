@@ -21,6 +21,11 @@ import javax.xml.bind.ValidationException;
 /**
  * Created by sukhesh on 08/09/16.
  */
+
+/**
+ * main entry point for the service
+ * starts the service on tomcat app server
+ */
 @ComponentScan(basePackages = "sukhesh.accessloganalytics")
 @EnableAutoConfiguration
 @SpringBootApplication
@@ -42,10 +47,16 @@ public class AccessLogAnalyticsBoot {
         ConfigurableApplicationContext applicationContext =
                 SpringApplication.run(AccessLogAnalyticsBoot.class);
 
+        /**
+         * store all the components for further fetching
+         */
         BeanLookupHelper.INSTANCE.init(applicationContext);
 
         TaskManager.INSTANCE.startReading();
 
+        /**
+         * go in a loop asking for input and giving output
+         */
         while (true) {
             try {
                 AccessLogAnalysis.run();

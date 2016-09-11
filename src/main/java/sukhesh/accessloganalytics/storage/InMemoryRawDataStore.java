@@ -18,6 +18,10 @@ import sukhesh.accessloganalytics.util.BeanLookupHelper;
 import sukhesh.accessloganalytics.util.Util;
 
 /**
+ * raw data store
+ * acts as the single point of insettion of log entries
+ * maintains a list of aggregated stores and inserts entry into them
+ *
  * Created by sukhesh on 08/09/16.
  */
 @Component

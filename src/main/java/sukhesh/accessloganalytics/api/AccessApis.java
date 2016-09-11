@@ -25,6 +25,11 @@ import java.util.Map;
 /**
  * Created by sukhesh on 08/09/16.
  */
+
+/**
+ * the api module
+ * provides query capabilities
+ */
 @RestController
 @RequestMapping(value = "v1/accessloganalytics/")
 @Component
@@ -74,7 +79,8 @@ public class AccessApis {
         }
 
         if(dimension == null) {
-            throw new ValidationException("at least one dimension must be specified");
+            dimension = new String[0];
+            // throw new ValidationException("at least one dimension must be specified");
         }
 
         if(StringUtils.isNotEmpty(sortAscending)) {

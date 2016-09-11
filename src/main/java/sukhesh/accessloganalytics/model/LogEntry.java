@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
+ * models a log entry
+ *
  * Created by sukhesh on 08/09/16.
  */
 public class LogEntry {

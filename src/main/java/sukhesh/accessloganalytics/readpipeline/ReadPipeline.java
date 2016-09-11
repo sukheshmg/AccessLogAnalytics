@@ -16,6 +16,8 @@ import java.net.URLConnection;
 import java.util.List;
 
 /**
+ * the read pipeline
+ * uses readers to read entries in batches and insert them into datastores
  * Created by sukhesh on 08/09/16.
  */
 @Component

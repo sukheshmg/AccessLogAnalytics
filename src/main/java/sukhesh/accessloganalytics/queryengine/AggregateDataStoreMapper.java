@@ -7,6 +7,7 @@ import sukhesh.accessloganalytics.util.BeanLookupHelper;
 import java.util.List;
 
 /**
+ * get an aggregated data store for the given dimension
  * Created by sukhesh on 09/09/16.
  */
 public class AggregateDataStoreMapper {

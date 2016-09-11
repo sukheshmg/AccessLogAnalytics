@@ -14,6 +14,9 @@ import sukhesh.accessloganalytics.util.Util;
 import java.util.*;
 
 /**
+ * time based aggregator
+ * provides time range query capabilities
+ *
  * Created by sukhesh on 08/09/16.
  */
 @Component
@@ -97,6 +100,9 @@ public class TimeBasedAggregatedDataStore implements AggregatedDataStore {
      */
     public synchronized Collection<List<LogEntry>> getEntriesAfterTime(DateTime start) {
         DateTime leastKey = entries.ceilingKey(start);
+        if(leastKey == null) {
+            return new LinkedList<>();
+        }
         Map<DateTime, List<LogEntry>> tailMap = entries.tailMap(leastKey);
         Collection<List<LogEntry>> ret = new LinkedList<>();
         List<LogEntry> theOnlyList = new LinkedList<>();

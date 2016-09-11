@@ -10,6 +10,13 @@ import java.util.List;
  * Created by sukhesh on 11/09/16.
  */
 public class Util {
+
+    /**
+     * deep copy of list of log entries
+     * needed as the group by operation alters the list structure
+     * @param values
+     * @return
+     */
     public static Collection<List<LogEntry>> deepCopy(Collection<List<LogEntry>> values) {
 
         Collection<List<LogEntry>> ret = new LinkedList<>();

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * loading config from command line arguments
  * Created by sukhesh on 08/09/16.
  */
 public enum ConfigLoader {

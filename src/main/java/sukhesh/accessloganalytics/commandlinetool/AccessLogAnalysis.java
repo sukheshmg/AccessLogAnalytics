@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 /**
+ * the command line tool
  * Created by sukhesh on 11/09/16.
  */
 public class AccessLogAnalysis {
